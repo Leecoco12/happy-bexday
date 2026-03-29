@@ -1,0 +1,499 @@
+/* Container principal vintage */
+.vintageContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5e6d3 0%, #e8d5b7 25%, #d4a574 50%, #a0522d 75%, #6b4423 100%);
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Texture de papier vintage */
+.vintageContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(139, 69, 19, 0.03) 2px, rgba(139, 69, 19, 0.03) 4px),
+    repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(212, 175, 55, 0.03) 2px, rgba(212, 175, 55, 0.03) 4px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ombres portées vintage */
+.vintageContainer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(107, 68, 35, 0.1) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Carte postale principale */
+.postalCard {
+  width: 100%;
+  max-width: 900px;
+  min-height: 600px;
+  background: linear-gradient(135deg, #fdf8e1 0%, #f5e6d3 50%, #e8d5b7 100%);
+  border-radius: 8px;
+  box-shadow: 
+    0 20px 60px rgba(107, 68, 35, 0.3),
+    0 10px 30px rgba(107, 68, 35, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 10;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+/* Effet de vieillissement de la carte */
+.postalCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(160, 82, 45, 0.05) 0%, transparent 70%);
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Header de la carte */
+.cardHeader {
+  text-align: center;
+  padding: 2rem 2rem 1rem;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+  position: relative;
+}
+
+/* Timbre vintage */
+.vintageStamp {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #e8d5b7 0%, #d4a574 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  box-shadow: 
+    0 4px 12px rgba(107, 68, 35, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border: 2px dashed rgba(212, 175, 55, 0.4);
+  transform: rotate(-5deg);
+}
+
+/* Cachet de la poste */
+.postmark {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245, 230, 211, 0.8);
+}
+
+.postmarkLines {
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+
+.postmarkLines::before,
+.postmarkLines::after {
+  content: '';
+  position: absolute;
+  background: rgba(212, 175, 55, 0.4);
+}
+
+.postmarkLines::before {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.postmarkLines::after {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+/* Titre vintage */
+.vintageTitle {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: #6b4423;
+  margin: 0 0 0.5rem;
+  text-shadow: 
+    2px 2px 4px rgba(107, 68, 35, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.3);
+  letter-spacing: 2px;
+  position: relative;
+}
+
+/* Ligne décorative sous le titre */
+.vintageTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #d4a574, transparent);
+}
+
+/* Date vintage */
+.vintageDate {
+  font-family: 'Georgia', serif;
+  font-size: 1rem;
+  color: #8b5a3c;
+  font-style: italic;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+/* Conteneur des cartes de visite */
+.cardsContainer {
+  padding: 2rem;
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Décoration vintage */
+.vintageDecor {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  font-size: 2rem;
+  opacity: 0.3;
+  transform: rotate(15deg);
+}
+
+/* Grille des cartes de visite */
+.visitCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .visitCardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Carte de visite individuelle */
+.visitCard {
+  background: linear-gradient(135deg, #fdf8e1 0%, #f9f3e9 50%, #f5e6d3 100%);
+  border: 1px solid var(--card-color);
+  border-radius: 6px;
+  padding: 1.5rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 8px 25px rgba(107, 68, 35, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform-style: preserve-3d;
+}
+
+/* Coin décoratif de la carte */
+.cardCorner {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  width: 20px;
+  height: 20px;
+}
+
+.cornerDecoration {
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--card-color);
+  border-radius: 0 0 0 100%;
+  opacity: 0.4;
+}
+
+/* Timbre de la carte de visite */
+.cardStamp {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 30px;
+  height: 30px;
+  background: rgba(212, 175, 55, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 2px 6px rgba(107, 68, 35, 0.2);
+  transform: rotate(-8deg);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+/* Contenu de la carte */
+.cardContent {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Icône de la carte */
+.cardIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 2px 4px rgba(107, 68, 35, 0.2));
+}
+
+/* Titre de la carte */
+.cardTitle {
+  font-family: 'Georgia', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--card-color);
+  margin: 0 0 0.5rem;
+  text-shadow: 1px 1px 2px rgba(107, 68, 35, 0.1);
+  letter-spacing: 0.5px;
+}
+
+/* Message de la carte */
+.cardMessage {
+  font-family: 'Georgia', serif;
+  font-size: 0.9rem;
+  color: #8b5a3c;
+  margin: 0;
+  font-style: italic;
+  line-height: 1.4;
+  opacity: 0.8;
+}
+
+/* Bordure décorative */
+.cardBorder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid var(--card-color);
+  border-radius: 6px;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* Effet de vieillissement */
+.vintageEffect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 30% 70%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(139, 69, 19, 0.03) 0%, transparent 50%);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+/* Hover de la carte de visite */
+.visitCard:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 
+    0 15px 35px rgba(107, 68, 35, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  border-color: var(--card-color);
+}
+
+.visitCard:hover .cardBorder {
+  opacity: 0.3;
+}
+
+.visitCard:hover .vintageEffect {
+  background: 
+    radial-gradient(circle at 30% 70%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(139, 69, 19, 0.05) 0%, transparent 50%);
+}
+
+/* Footer de la carte */
+.cardFooter {
+  padding: 1.5rem 2rem;
+  border-top: 2px solid rgba(212, 175, 55, 0.2);
+  text-align: center;
+  position: relative;
+}
+
+/* Ligne de signature */
+.signatureLine {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.signatureLine::before {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #d4a574, transparent);
+}
+
+/* Texte de signature */
+.signatureText {
+  font-family: 'Georgia', serif;
+  font-size: 1rem;
+  color: #6b4423;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+/* Bouton retour vintage */
+.vintageBackButton {
+  background: linear-gradient(135deg, #e8d5b7 0%, #d4a574 100%);
+  border: 1px solid #a0522d;
+  border-radius: 25px;
+  padding: 0.8rem 1.5rem;
+  color: #fdf8e1;
+  font-family: 'Georgia', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 4px 12px rgba(107, 68, 35, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.5px;
+}
+
+.vintageBackButton:hover {
+  background: linear-gradient(135deg, #d4a574 0%, #a0522d 100%);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 16px rgba(107, 68, 35, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Ornements vintage décoratifs */
+.vintageOrnament {
+  position: absolute;
+  font-size: 1.5rem;
+  opacity: 0.3;
+  filter: sepia(0.3) blur(0.5px);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .vintageContainer {
+    padding: 1rem;
+  }
+  
+  .postalCard {
+    min-height: 500px;
+  }
+  
+  .cardHeader {
+    padding: 1.5rem 1rem 0.8rem;
+  }
+  
+  .vintageTitle {
+    font-size: clamp(2rem, 6vw, 2.5rem);
+  }
+  
+  .vintageStamp {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+  
+  .postmark {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .cardsContainer {
+    padding: 1rem;
+  }
+  
+  .visitCardsGrid {
+    gap: 1rem;
+  }
+  
+  .visitCard {
+    padding: 1rem;
+  }
+  
+  .cardIcon {
+    font-size: 2rem;
+  }
+  
+  .cardTitle {
+    font-size: 1rem;
+  }
+  
+  .cardMessage {
+    font-size: 0.8rem;
+  }
+  
+  .cardFooter {
+    padding: 1rem;
+  }
+  
+  .vintageBackButton {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .visitCardsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .vintageTitle {
+    font-size: clamp(1.8rem, 8vw, 2.2rem);
+  }
+  
+  .vintageOrnament {
+    font-size: 1.2rem;
+  }
+}

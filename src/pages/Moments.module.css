@@ -1,0 +1,171 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  padding: 2rem 1rem;
+}
+ 
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+ 
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  background: rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50px;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
+}
+ 
+.backButton:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: translateX(-5px);
+}
+ 
+.title {
+  text-align: center;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 4rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: var(--font-display, system-ui, -apple-system, sans-serif);
+}
+ 
+.momentsList {
+  margin-bottom: 4rem;
+}
+ 
+.momentItem {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  margin-bottom: 6rem;
+  min-height: 400px;
+}
+ 
+.momentItem.left {
+  flex-direction: row;
+}
+ 
+.momentItem.right {
+  flex-direction: row-reverse;
+}
+ 
+.textSection {
+  flex: 1;
+  padding: 2rem;
+}
+ 
+.imageSection {
+  flex: 1;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+ 
+.momentImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  min-height: 350px;
+}
+ 
+.imageSection:hover .momentImage {
+  transform: scale(1.05);
+}
+ 
+.momentTitle {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-family: var(--font-display, system-ui, -apple-system, sans-serif);
+}
+ 
+.momentText {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+  margin: 0;
+  font-weight: 400;
+  text-align: justify;
+}
+ 
+.ending {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+ 
+.endingText {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #333;
+  margin: 0;
+  font-weight: 500;
+  font-style: italic;
+}
+ 
+@media (max-width: 968px) {
+  .momentItem {
+    flex-direction: column !important;
+    gap: 2rem;
+    text-align: center;
+  }
+ 
+  .textSection {
+    padding: 1rem;
+  }
+ 
+  .momentText {
+    text-align: center;
+  }
+ 
+  .imageSection {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+ 
+@media (max-width: 640px) {
+  .container {
+    padding: 1rem 0.5rem;
+  }
+ 
+  .momentItem {
+    margin-bottom: 4rem;
+  }
+ 
+  .momentTitle {
+    font-size: 1.3rem;
+  }
+ 
+  .momentText {
+    font-size: 1rem;
+  }
+ 
+  .ending {
+    padding: 2rem 1.5rem;
+  }
+ 
+  .endingText {
+    font-size: 1.1rem;
+  }
+}

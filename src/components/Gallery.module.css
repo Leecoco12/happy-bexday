@@ -1,3 +1,48 @@
+.romanticSection {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.romanticButton {
+  padding: 1.2rem 2.5rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #ff6b9d, #ff8e9e, #ffa8b5);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(255, 107, 157, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.romanticButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.romanticButton:hover::before {
+  left: 100%;
+}
+
+.romanticButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 40px rgba(255, 107, 157, 0.4);
+}
+
 .section {
   position: relative;
   width: min(96vw, 920px);

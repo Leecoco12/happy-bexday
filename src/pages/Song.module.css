@@ -1,0 +1,113 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+ 
+.content {
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+}
+ 
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
+  align-self: flex-start;
+}
+ 
+.backButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateX(-5px);
+}
+ 
+.videoSection {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border-radius: 30px;
+  padding: 3rem 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+ 
+.title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  color: white;
+  margin-bottom: 2.5rem;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  font-family: var(--font-display, system-ui, -apple-system, sans-serif);
+}
+ 
+.videoContainer {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  margin-bottom: 2.5rem;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+ 
+.video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 20px;
+}
+ 
+.message {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+ 
+.romanticText {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: white;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 400;
+}
+ 
+.signature {
+  font-size: 1rem;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+ 
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+ 
+  .videoSection {
+    padding: 2rem 1.5rem;
+  }
+ 
+  .romanticText {
+    font-size: 1rem;
+  }
+}
+ 
+
