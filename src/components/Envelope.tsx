@@ -1,55 +1,84 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
 import styles from './Envelope.module.css';
 
-type EnvelopeProps = {
-  open: boolean;
-  onOpen: () => void;
-  disabled?: boolean;
-};
+// Simple envelope component with text on it
+export function SimpleEnvelope({ open, onOpen, disabled }: { open: boolean; onOpen: () => void; disabled?: boolean }) {
+  const [isOpening, setIsOpening] = useState(false);
 
-export function Envelope({ open, onOpen, disabled }: EnvelopeProps) {
+  const handleEnvelopeClick = () => {
+    if (!disabled && !open && !isOpening) {
+      setIsOpening(true);
+      setTimeout(() => {
+        onOpen();
+      }, 1500); // Wait for opening animation to complete
+    }
+  };
+
   return (
-    <motion.div
-      className={styles.wrap}
-      animate={{ y: [0, -10, 0] }}
-      transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
-    >
-      <button
-        type="button"
-        className={styles.hit}
-        onClick={onOpen}
-        disabled={disabled || open}
-        aria-expanded={open}
-        aria-label={open ? 'Message opened' : 'Open your message'}
-      >
-        <span className={styles.scene}>
-          <span className={styles.back} />
-          <motion.span
-            className={styles.letter}
-            animate={
-              open
-                ? { y: '-118%', opacity: 1, rotateX: 6 }
-                : { y: '8%', opacity: 0.96, rotateX: 0 }
-            }
-            transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1] }}
+    <div className={styles.simpleEnvelopeContainer}>
+      <AnimatePresence mode="wait">
+        {!isOpening ? (
+          <motion.div
+            key="closed"
+            className={styles.envelopeButton}
+            onClick={handleEnvelopeClick}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            exit={{ 
+              scale: 1.2, 
+              opacity: 0, 
+              transition: { duration: 0.8 }
+            }}
           >
-            <span className={styles.letterInner}>
-              <span className={styles.wax} aria-hidden />
-            </span>
-          </motion.span>
-          <span className={styles.front} />
-          <motion.span
-            className={styles.flap}
-            style={{ transformOrigin: '50% 0%' }}
-            animate={
-              open
-                ? { rotateX: 178, zIndex: 2 }
-                : { rotateX: 0, zIndex: 4 }
-            }
-            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-          />
-        </span>
-      </button>
-    </motion.div>
+            <div className={styles.envelopeBody}>
+              <div className={styles.envelopeFlap} />
+              <div className={styles.envelopeSeal}>
+                <div className={styles.sealCircle} />
+              </div>
+              {/* Text on envelope */}
+              <div className={styles.envelopeText}>
+                <p className={styles.textLine}>J'ai un message pour toi 💌</p>
+                <p className={styles.textLine}>Clique sur l'enveloppe pour voir le message</p>
+              </div>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="opening"
+            className={styles.envelopeOpeningAnimation}
+            initial={{ scale: 1, opacity: 1 }}
+            animate={{ 
+              scale: [1, 1.1, 0.9],
+              opacity: [1, 0.8, 0.6],
+            }}
+            transition={{ duration: 1.5, ease: 'easeInOut' }}
+          >
+            <div className={styles.openingEnvelope}>
+              <motion.div
+                className={styles.envelopeFlapOpening}
+                initial={{ rotateX: 0 }}
+                animate={{ rotateX: -180 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              />
+              <motion.div
+                className={styles.envelopeBodyOpening}
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 0.4 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
+}
+
+// Main envelope component (now uses SimpleEnvelope)
+export function Envelope({ open, onOpen, disabled }: { open: boolean; onOpen: () => void; disabled?: boolean }) {
+  return <SimpleEnvelope open={open} onOpen={onOpen} disabled={disabled} />;
 }

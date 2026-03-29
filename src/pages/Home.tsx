@@ -1,29 +1,49 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import '../assets/styles/components.css';
 import { Confetti } from '../components/Confetti';
+import { Envelope } from '../components/Envelope';
 import type { GalleryItem } from '../components/Gallery';
 import { Gallery } from '../components/Gallery';
 import { Message, MessageStatic } from '../components/Message';
 import { ParticleBackground } from '../components/ParticleBackground';
-import { useTheme } from '../context/ThemeContext';
 import styles from './Home.module.css';
 
-/** Add `public/music.mp3` for gentle background music (optional). */
-const MUSIC_SRC = '/music.mp3';
+// Animated birthday greeting component
+const BirthdayGreeting = () => {
+  const text = "Joyeux anniversaire mon amour";
+  const words = text.split(' ');
+
+  return (
+    <motion.h1 
+      className={styles.birthdayGreeting}
+      initial={{ opacity: 0, y: -30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1, ease: 'easeOut' }}
+    >
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.2, duration: 0.6 }}
+          style={{ display: 'inline-block', marginRight: '0.3em' }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </motion.h1>
+  );
+};
 
 const MESSAGE_LINES = [
   'En ce jour si spécial, je voulais t’écrire quelque chose de vrai.',
   'Tu apportes une douceur discrète à ceux qui t’entourent — ce rire, cette présence, ces petits gestes qui comptent plus qu’on ne le dit.',
   'Que cette nouvelle année t’offre le calme d’un foyer, des joies imprévues, et une affection qui ne vacille pas quand tout va trop vite autour de toi.',
-  'Joyeux anniversaire. Tu combs énormément pour moi. 💌',
+  'Joyeux anniversaire mon amour. Tu combs énormément pour moi. 💌',
 ];
 
 const GALLERY_ITEMS: GalleryItem[] = [
-  {
-    src: 'https://images.unsplash.com/photo-1518199266791-5375a82890b5?w=900&auto=format&fit=crop&q=70',
-    alt: 'Fleurs pastel',
-  },
   {
     src: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=900&auto=format&fit=crop&q=70',
     alt: 'Bougies et lumière douce',
@@ -41,37 +61,14 @@ const GALLERY_ITEMS: GalleryItem[] = [
 type Phase = 'intro' | 'letter' | 'memories';
 
 export function Home() {
-  const { theme, toggleTheme } = useTheme();
   const [phase, setPhase] = useState<Phase>('intro');
-  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [confettiActive, setConfettiActive] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const syncPlayingState = useCallback(() => {
-    setIsMusicPlaying(!audioRef.current?.paused);
-  }, []);
-
-  const toggleMusic = useCallback(() => {
-    const el = audioRef.current;
-    if (!el) return;
-    if (el.paused) {
-      el.volume = 0.35;
-      void el.play().then(() => setIsMusicPlaying(true), syncPlayingState);
-    } else {
-      el.pause();
-      setIsMusicPlaying(false);
-    }
-  }, [syncPlayingState]);
+  const [envelopeOpen, setEnvelopeOpen] = useState(false);
 
   const goToWishes = useCallback(() => {
     if (phase !== 'intro') return;
-    window.setTimeout(() => {
-      const el = audioRef.current;
-      if (!el) return;
-      el.volume = 0.35;
-      void el.play().then(() => setIsMusicPlaying(true), () => setIsMusicPlaying(false));
-    }, 120);
-    window.setTimeout(() => setPhase('letter'), 380);
+    setEnvelopeOpen(true);
+    setPhase('letter');
   }, [phase]);
 
   const handleMessageComplete = useCallback(() => {
@@ -83,48 +80,15 @@ export function Home() {
   }, []);
 
   const replay = useCallback(() => {
-    audioRef.current?.pause();
-    if (audioRef.current) audioRef.current.currentTime = 0;
-    setIsMusicPlaying(false);
     setPhase('intro');
     setConfettiActive(false);
+    setEnvelopeOpen(false);
   }, []);
 
   return (
     <div className="home-shell">
-      <audio
-        ref={audioRef}
-        src={MUSIC_SRC}
-        loop
-        preload="metadata"
-        onPlay={() => setIsMusicPlaying(true)}
-        onPause={() => setIsMusicPlaying(false)}
-      />
-
       <ParticleBackground />
       <Confetti active={confettiActive} />
-
-      <div className="top-bar">
-        <button
-          type="button"
-          className="icon-button"
-          onClick={toggleMusic}
-          aria-pressed={isMusicPlaying}
-          title={isMusicPlaying ? 'Pause musique' : 'Lecture musique'}
-        >
-          <span className="sr-only">Musique de fond</span>
-          <span aria-hidden>{isMusicPlaying ? '🔊' : '🔈'}</span>
-        </button>
-        <button
-          type="button"
-          className="icon-button"
-          onClick={toggleTheme}
-          title={`Thème ${theme === 'light' ? 'sombre' : 'clair'}`}
-        >
-          <span className="sr-only">Changer le thème</span>
-          <span aria-hidden>{theme === 'light' ? '🌙' : '☀️'}</span>
-        </button>
-      </div>
 
       <main className={styles.main}>
         <AnimatePresence mode="wait">
@@ -138,17 +102,23 @@ export function Home() {
               transition={{ duration: 0.55 }}
             >
               <div className={styles.introBlock}>
-                <h1 className={styles.introTitle}>Tu as un message 💌</h1>
-                <p className={styles.introHint}>
-                  Un petit clin d’œil rien que pour toi
-                </p>
-                <button
-                  type="button"
-                  className={styles.cta}
-                  onClick={goToWishes}
+                <BirthdayGreeting />
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ 
+                    duration: 0.8, 
+                    delay: 1.5,
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 15
+                  }}
                 >
-                  Ouvrir le message
-                </button>
+                  <Envelope 
+                    open={envelopeOpen} 
+                    onOpen={goToWishes}
+                  />
+                </motion.div>
               </div>
             </motion.div>
           )}

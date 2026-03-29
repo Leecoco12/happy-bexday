@@ -49,18 +49,255 @@ body {
   margin: 0;
   font-family: var(--font-body);
   color: var(--text);
-  background: radial-gradient(
+  background: 
+    /* Ballons d'anniversaire individuels */
+    radial-gradient(circle at 12% 25%, transparent 30px, rgba(255, 107, 107, 0.3) 31px, transparent 32px),
+    radial-gradient(circle at 88% 15%, transparent 30px, rgba(254, 202, 87, 0.3) 31px, transparent 32px),
+    radial-gradient(circle at 25% 70%, transparent 30px, rgba(255, 159, 243, 0.3) 31px, transparent 32px),
+    radial-gradient(circle at 75% 80%, transparent 30px, rgba(84, 160, 255, 0.3) 31px, transparent 32px),
+    radial-gradient(circle at 45% 35%, transparent 30px, rgba(72, 219, 251, 0.3) 31px, transparent 32px),
+    radial-gradient(circle at 55% 65%, transparent 30px, rgba(255, 107, 107, 0.3) 31px, transparent 32px),
+    
+    /* Éléments décoratifs d'anniversaire - ballons plus gros */
+    radial-gradient(circle at 15% 20%, rgba(255, 107, 107, 0.4) 8px, transparent 10px),
+    radial-gradient(circle at 25% 35%, rgba(254, 202, 87, 0.4) 12px, transparent 15px),
+    radial-gradient(circle at 35% 15%, rgba(255, 159, 243, 0.4) 8px, transparent 10px),
+    radial-gradient(circle at 45% 25%, rgba(84, 160, 255, 0.4) 12px, transparent 15px),
+    radial-gradient(circle at 55% 10%, rgba(72, 219, 251, 0.4) 8px, transparent 10px),
+    radial-gradient(circle at 65% 30%, rgba(255, 107, 107, 0.4) 15px, transparent 18px),
+    radial-gradient(circle at 75% 20%, rgba(254, 202, 87, 0.4) 8px, transparent 10px),
+    radial-gradient(circle at 85% 35%, rgba(255, 159, 243, 0.4) 12px, transparent 15px),
+    radial-gradient(circle at 10% 60%, rgba(84, 160, 255, 0.4) 8px, transparent 10px),
+    radial-gradient(circle at 20% 75%, rgba(72, 219, 251, 0.4) 12px, transparent 15px),
+    radial-gradient(circle at 30% 65%, rgba(255, 107, 107, 0.4) 15px, transparent 18px),
+    radial-gradient(circle at 40% 80%, rgba(254, 202, 87, 0.4) 8px, transparent 10px),
+    radial-gradient(circle at 50% 70%, rgba(255, 159, 243, 0.4) 12px, transparent 15px),
+    radial-gradient(circle at 60% 85%, rgba(84, 160, 255, 0.4) 8px, transparent 10px),
+    radial-gradient(circle at 70% 75%, rgba(72, 219, 251, 0.4) 12px, transparent 15px),
+    radial-gradient(circle at 80% 65%, rgba(255, 107, 107, 0.4) 15px, transparent 18px),
+    radial-gradient(circle at 90% 80%, rgba(254, 202, 87, 0.4) 8px, transparent 10px),
+    
+    /* Dégradé de fond original avec plus de visibilité */
+    radial-gradient(
       1200px 800px at 10% -10%,
-      rgba(199, 169, 230, 0.35),
+      rgba(199, 169, 230, 0.6),
       transparent 55%
     ),
     radial-gradient(
       900px 600px at 100% 20%,
-      rgba(247, 186, 214, 0.35),
+      rgba(247, 186, 214, 0.6),
       transparent 50%
     ),
     linear-gradient(165deg, var(--bg-0), var(--bg-1) 45%, var(--bg-2));
+  background-size: 
+    /* Taille des ballons individuels */
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    /* Taille des éléments décoratifs - évitons la répétition */
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    100vw 100vh,
+    /* Taille des dégradés de fond */
+    1200px 800px,
+    900px 600px,
+    100% 100%;
+  background-attachment: fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, fixed, scroll, scroll, scroll;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Ballons d'anniversaire flottants individuels */
+body::before {
+  content: "🎈";
+  position: fixed;
+  top: 25%;
+  left: 12%;
+  font-size: 2.5rem;
+  opacity: 0.7;
+  z-index: -1;
+  pointer-events: none;
+  animation: floatBalloon1 15s ease-in-out infinite;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+body::after {
+  content: "🥳";
+  position: fixed;
+  top: 15%;
+  left: 88%;
+  font-size: 2rem;
+  opacity: 0.6;
+  z-index: -1;
+  pointer-events: none;
+  animation: floatBalloon2 18s ease-in-out infinite;
+  animation-delay: 2s;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Éléments supplémentaires avec pseudo-éléments sur html */
+html::before {
+  content: "🥳";
+  position: fixed;
+  top: 70%;
+  left: 25%;
+  font-size: 2.2rem;
+  opacity: 0.6;
+  z-index: -1;
+  pointer-events: none;
+  animation: floatBalloon3 20s ease-in-out infinite;
+  animation-delay: 4s;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+html::after {
+  content: "🕯️";
+  position: fixed;
+  top: 80%;
+  left: 75%;
+  font-size: 1.8rem;
+  opacity: 0.5;
+  z-index: -1;
+  pointer-events: none;
+  animation: floatBalloon4 22s ease-in-out infinite;
+  animation-delay: 6s;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Éléments décoratifs supplémentaires */
+#root::before {
+  content: "🎉";
+  position: fixed;
+  top: 35%;
+  left: 85%;
+  font-size: 2rem;
+  opacity: 0.6;
+  z-index: -1;
+  pointer-events: none;
+  animation: floatBalloon5 16s ease-in-out infinite;
+  animation-delay: 1s;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#root::after {
+  content: "🎊";
+  position: fixed;
+  top: 60%;
+  left: 8%;
+  font-size: 1.9rem;
+  opacity: 0.5;
+  z-index: -1;
+  pointer-events: none;
+  animation: floatBalloon6 19s ease-in-out infinite;
+  animation-delay: 3s;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Éléments décoratifs additionnels */
+main::before {
+  content: "✨";
+  position: fixed;
+  top: 45%;
+  left: 92%;
+  font-size: 1.7rem;
+  opacity: 0.6;
+  z-index: -1;
+  pointer-events: none;
+  animation: floatBalloon7 17s ease-in-out infinite;
+  animation-delay: 5s;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+main::after {
+  content: "🎀";
+  position: fixed;
+  top: 30%;
+  left: 5%;
+  font-size: 2.1rem;
+  opacity: 0.5;
+  z-index: -1;
+  pointer-events: none;
+  animation: floatBalloon8 21s ease-in-out infinite;
+  animation-delay: 7s;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes floatBalloon1 {
+  0% { transform: translateY(0px) rotate(-5deg) scale(1); }
+  25% { transform: translateY(-15px) rotate(3deg) scale(1.05); }
+  50% { transform: translateY(-30px) rotate(5deg) scale(1.1); }
+  75% { transform: translateY(-15px) rotate(-3deg) scale(1.05); }
+  100% { transform: translateY(0px) rotate(-5deg) scale(1); }
+}
+
+@keyframes floatBalloon2 {
+  0% { transform: translateY(0px) rotate(5deg) scale(1); }
+  25% { transform: translateY(-12px) rotate(-3deg) scale(1.08); }
+  50% { transform: translateY(-25px) rotate(-5deg) scale(1.15); }
+  75% { transform: translateY(-12px) rotate(3deg) scale(1.08); }
+  100% { transform: translateY(0px) rotate(5deg) scale(1); }
+}
+
+@keyframes floatBalloon3 {
+  0% { transform: translateY(0px) rotate(-3deg) scale(1); }
+  25% { transform: translateY(-18px) rotate(2deg) scale(1.06); }
+  50% { transform: translateY(-35px) rotate(3deg) scale(1.12); }
+  75% { transform: translateY(-18px) rotate(-2deg) scale(1.06); }
+  100% { transform: translateY(0px) rotate(-3deg) scale(1); }
+}
+
+@keyframes floatBalloon4 {
+  0% { transform: translateY(0px) rotate(3deg) scale(1); }
+  25% { transform: translateY(-10px) rotate(-2deg) scale(1.04); }
+  50% { transform: translateY(-20px) rotate(-3deg) scale(1.08); }
+  75% { transform: translateY(-10px) rotate(2deg) scale(1.04); }
+  100% { transform: translateY(0px) rotate(3deg) scale(1); }
+}
+
+@keyframes floatBalloon5 {
+  0% { transform: translateY(0px) rotate(-4deg) scale(1); }
+  25% { transform: translateY(-14px) rotate(2deg) scale(1.07); }
+  50% { transform: translateY(-28px) rotate(4deg) scale(1.14); }
+  75% { transform: translateY(-14px) rotate(-2deg) scale(1.07); }
+  100% { transform: translateY(0px) rotate(-4deg) scale(1); }
+}
+
+@keyframes floatBalloon6 {
+  0% { transform: translateY(0px) rotate(4deg) scale(1); }
+  25% { transform: translateY(-16px) rotate(-2deg) scale(1.09); }
+  50% { transform: translateY(-32px) rotate(-4deg) scale(1.18); }
+  75% { transform: translateY(-16px) rotate(2deg) scale(1.09); }
+  100% { transform: translateY(0px) rotate(4deg) scale(1); }
+}
+
+@keyframes floatBalloon7 {
+  0% { transform: translateY(0px) rotate(-6deg) scale(1); }
+  25% { transform: translateY(-13px) rotate(3deg) scale(1.05); }
+  50% { transform: translateY(-26px) rotate(6deg) scale(1.10); }
+  75% { transform: translateY(-13px) rotate(-3deg) scale(1.05); }
+  100% { transform: translateY(0px) rotate(-6deg) scale(1); }
+}
+
+@keyframes floatBalloon8 {
+  0% { transform: translateY(0px) rotate(6deg) scale(1); }
+  25% { transform: translateY(-17px) rotate(-3deg) scale(1.11); }
+  50% { transform: translateY(-34px) rotate(-6deg) scale(1.22); }
+  75% { transform: translateY(-17px) rotate(3deg) scale(1.11); }
+  100% { transform: translateY(0px) rotate(6deg) scale(1); }
 }
 
 button,

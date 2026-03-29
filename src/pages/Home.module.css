@@ -5,9 +5,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: clamp(4.5rem, 10vw, 6rem) 1.25rem 2.5rem;
+  padding: 6rem 1.25rem 2.5rem;
   z-index: 2;
   isolation: isolate;
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 4rem 1rem 2rem;
+  }
 }
 
 .introBlock {
@@ -16,6 +22,45 @@
   align-items: center;
   text-align: center;
   max-width: min(92vw, 400px);
+  gap: 2rem;
+}
+
+.birthdayGreeting {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: linear-gradient(
+    135deg,
+    #d4a574,
+    #8b4513,
+    #daa520
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+  line-height: 1.2;
+  position: relative;
+  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3));
+}
+
+.birthdayGreeting::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #daa520,
+    transparent
+  );
+  border-radius: 1px;
 }
 
 .introTitle {
@@ -46,13 +91,14 @@
     rgba(245, 228, 242, 0.92)
   );
   border: 1px solid var(--border);
-  box-shadow: var(--shadow);
+  box-shadow: 0 8px 24px rgba(139, 69, 19, 0.2), 0 0 20px rgba(255, 255, 255, 0.3);
   cursor: pointer;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.4));
 }
 
 .cta:hover {
@@ -86,13 +132,50 @@
   font-weight: 500;
   background: linear-gradient(
     135deg,
-    rgba(183, 110, 158, 0.22),
-    rgba(155, 126, 217, 0.22)
+    rgba(183, 110, 158, 0.3),
+    rgba(155, 126, 217, 0.3)
   );
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-soft);
+  box-shadow: 0 6px 20px rgba(139, 69, 19, 0.15), 0 0 15px rgba(255, 255, 255, 0.2);
+  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3));
 }
 
 .replay:hover {
   transform: translateY(-1px);
+}
+
+/* Animations pour le thème anniversaire */
+@keyframes textGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes buttonGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes glowLine {
+  0%, 100% {
+    opacity: 0.6;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+  }
 }

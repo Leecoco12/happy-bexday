@@ -37,6 +37,14 @@ export function Gallery({ items, onLightboxOpenChange }: GalleryProps) {
   }, [onLightboxOpenChange]);
 
   const handleSwiperInit = useCallback((swiper: SwiperType) => {
+    // Démarrer l'autoplay après une petite pause pour s'assurer que tout est chargé
+    setTimeout(() => {
+      swiper.autoplay.start();
+    }, 100);
+  }, []);
+
+  const handleSwiperClick = useCallback((swiper: SwiperType) => {
+    // Redémarrer l'autoplay après un clic
     swiper.autoplay.start();
   }, []);
 
@@ -51,32 +59,51 @@ export function Gallery({ items, onLightboxOpenChange }: GalleryProps) {
       <h2 id={headingId} className={styles.title}>
         Little moments
       </h2>
-      <p className={styles.subtitle}>Tap an image to open the lightbox</p>
+      {/* <p className={styles.subtitle}>Tap an image to open the lightbox</p> */}
 
       <div className={styles.sliderWrap}>
         <Swiper
           modules={[Autoplay, Pagination, EffectCreative]}
           effect="creative"
           creativeEffect={{
-            prev: { shadow: true, translate: ['-16%', 0, -220] },
-            next: { shadow: true, translate: ['16%', 0, -220] },
+            prev: { 
+              shadow: true, 
+              translate: ['-100%', 0, -200]
+            },
+            next: { 
+              shadow: true, 
+              translate: ['100%', 0, -200]
+            },
           }}
           grabCursor
           centeredSlides
-          slidesPerView={1.15}
-          spaceBetween={18}
+          slidesPerView={1.2}
+          spaceBetween={24}
           loop={items.length > 1}
           autoplay={{
-            delay: 4200,
+            delay: 3500,
             disableOnInteraction: false,
-            pauseOnMouseEnter: true,
+            pauseOnMouseEnter: false,
+            waitForTransition: true,
           }}
-          pagination={{ clickable: true }}
+          pagination={{ 
+            clickable: true,
+            dynamicBullets: true,
+            dynamicMainBullets: 3,
+          }}
           breakpoints={{
-            640: { slidesPerView: 1.25, spaceBetween: 22 },
-            900: { slidesPerView: 1.4, spaceBetween: 28 },
+            640: { 
+              slidesPerView: 1.3, 
+              spaceBetween: 28
+            },
+            900: { 
+              slidesPerView: 1.4, 
+              spaceBetween: 32
+            },
           }}
+          speed={800}
           onSwiper={handleSwiperInit}
+          onSlideChangeTransitionStart={handleSwiperClick}
           className={styles.swiper}
         >
           {items.map((item, index) => (

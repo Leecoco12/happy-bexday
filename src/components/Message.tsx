@@ -4,7 +4,7 @@ import { FloatingHearts } from './FloatingHearts';
 import styles from './Message.module.css';
 
 function buildText(lines: string[]) {
-  return lines.join('\n\n');
+  return lines.join('\n');
 }
 
 export function MessageStatic({ lines }: { lines: string[] }) {
@@ -13,15 +13,71 @@ export function MessageStatic({ lines }: { lines: string[] }) {
   return (
     <motion.div
       className={styles.shell}
-      initial={{ opacity: 0, y: 18 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ 
+        opacity: 0, 
+        y: 80, 
+        scale: 0.8,
+        rotateX: 8,
+        transformPerspective: 1000
+      }}
+      animate={{ 
+        opacity: 1, 
+        y: 0, 
+        scale: 1,
+        rotateX: 0
+      }}
+      transition={{ 
+        duration: 1.0, 
+        ease: [0.22, 1, 0.36, 1],
+        delay: 0.2
+      }}
     >
-      <FloatingHearts />
-      <div className={styles.card}>
-        <p className={styles.kicker}>Avec tout mon cœur</p>
-        <div className={styles.body}>{text}</div>
-      </div>
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ 
+          duration: 0.6, 
+          delay: 0.5,
+          ease: "easeOut"
+        }}
+      >
+        <FloatingHearts />
+      </motion.div>
+      <motion.div 
+        className={styles.card}
+        initial={{ 
+          scale: 0.85, 
+          opacity: 0,
+          boxShadow: "0 0 0 rgba(0,0,0,0)"
+        }}
+        animate={{ 
+          scale: 1, 
+          opacity: 1,
+          boxShadow: "var(--shadow)"
+        }}
+        transition={{ 
+          duration: 0.7, 
+          delay: 0.7,
+          ease: [0.22, 1, 0.36, 1]
+        }}
+      >
+        <motion.p 
+          className={styles.kicker}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9, duration: 0.5 }}
+        >
+          Avec tout mon cœur
+        </motion.p>
+        <motion.div 
+          className={styles.body}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.1, duration: 0.4 }}
+        >
+          {text}
+        </motion.div>
+      </motion.div>
     </motion.div>
   );
 }
@@ -35,8 +91,8 @@ type MessageProps = {
 
 export function Message({
   lines,
-  typingSpeedMs = 42,
-  linePauseMs = 600,
+  typingSpeedMs = 80,
+  linePauseMs = 1000,
   onComplete,
 }: MessageProps) {
   const fullText = buildText(lines);
@@ -67,7 +123,7 @@ export function Message({
       timeoutId = window.setTimeout(tick, pause);
     };
 
-    timeoutId = window.setTimeout(tick, 280);
+    timeoutId = window.setTimeout(tick, 800);
     return () => {
       cancelled = true;
       window.clearTimeout(timeoutId);
@@ -75,27 +131,90 @@ export function Message({
   }, [fullText, linePauseMs, typingSpeedMs]);
 
   return (
-    <motion.div
-      className={styles.shell}
-      initial={{ opacity: 0, y: 28, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <FloatingHearts dense />
-      <div className={styles.card}>
-        <p className={styles.kicker}>Avec tout mon cœur</p>
-        <div className={styles.body} aria-live="polite">
-          {shown}
-          {!done && (
-            <motion.span
-              className={styles.caret}
-              animate={{ opacity: [1, 0.2, 1] }}
-              transition={{ duration: 0.9, repeat: Infinity }}
-              aria-hidden
-            />
-          )}
-        </div>
-      </div>
-    </motion.div>
+    <div className={styles.combinedAnimation}>
+      {/* Direct message appearance without envelope */}
+      <motion.div
+        className={styles.mysteriousMessage}
+        initial={{ 
+          opacity: 0,
+          scale: 0.6,
+          rotate: -3,
+          filter: "blur(15px)"
+        }}
+        animate={{ 
+          opacity: 1,
+          scale: 1,
+          rotate: 0,
+          filter: "blur(0px)"
+        }}
+        transition={{ 
+          duration: 1.5,
+          ease: [0.22, 1, 0.36, 1]
+        }}
+      >
+        <motion.div
+          className={styles.centeredMessage}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8, duration: 0.6 }}
+        >
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ 
+              duration: 0.8, 
+              delay: 1.2,
+              ease: "easeOut"
+            }}
+          >
+            <FloatingHearts dense />
+          </motion.div>
+          <motion.div 
+            className={styles.card}
+            initial={{ 
+              scale: 0.7, 
+              opacity: 0,
+              y: 30
+            }}
+            animate={{ 
+              scale: 1, 
+              opacity: 1,
+              y: 0
+            }}
+            transition={{ 
+              duration: 0.9, 
+              delay: 1.6,
+              ease: [0.22, 1, 0.36, 1]
+            }}
+          >
+            <motion.p 
+              className={styles.kicker}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 2.2, duration: 0.6 }}
+            >
+              Avec tout mon cœur
+            </motion.p>
+            <motion.div 
+              className={styles.body} 
+              aria-live="polite"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2.6, duration: 0.5 }}
+            >
+              {shown}
+              {!done && (
+                <motion.span
+                  className={styles.caret}
+                  animate={{ opacity: [1, 0.2, 1] }}
+                  transition={{ duration: 0.9, repeat: Infinity }}
+                  aria-hidden
+                />
+              )}
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </div>
   );
 }
