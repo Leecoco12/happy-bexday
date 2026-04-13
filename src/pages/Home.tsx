@@ -36,10 +36,10 @@ const BirthdayGreeting = () => {
 };
 
 const MESSAGE_LINES = [
-  'En ce jour si spécial, je voulais t’écrire quelque chose de vrai.',
-  'Tu apportes une douceur discrète à ceux qui t’entourent — ce rire, cette présence, ces petits gestes qui comptent plus qu’on ne le dit.',
-  'Que cette nouvelle année t’offre le calme d’un foyer, des joies imprévues, et une affection qui ne vacille pas quand tout va trop vite autour de toi.',
-  'Joyeux anniversaire mon amour. Tu combs énormément pour moi. 💌',
+  'En ce jour si spécial, je célèbre bien plus que ton anniversaire — je célèbre la chance immense de t’avoir dans ma vie.',
+  'Ton sourire, ton regard, ta manière d’être… tout chez toi me touche profondément.',
+  'Je te promets de continuer à t’aimer, à te soutenir, et à construire avec toi quelque chose de vrai, de fort, et de beau.',
+  'Joyeux anniversaire mon amour. Tu es tout pour moi. 💖',
 ];
 
 type Phase = 'intro' | 'letter' | 'memories';

@@ -28,16 +28,18 @@ export function Song() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
-          <h1 className={styles.title}>Song for you 🎵</h1>
+          <h1 className={styles.title}>Video for you video</h1>
  
           <div className={styles.videoContainer}>
-            <iframe
+            <video
               className={styles.video}
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-              title="Ordinary - A special song for you"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
+              src="/videos/animation_D.mp4"
+              title="A special video for you"
+              controls
+              autoPlay
+              muted
+              loop
+              playsInline
             />
           </div>
  
@@ -48,10 +50,12 @@ export function Song() {
             transition={{ delay: 0.6, duration: 0.6 }}
           >
             <p className={styles.romanticText}>
-              Cette chanson me fait penser à toi chaque fois que je l'écoute. 
-              Les paroles, la mélodie, tout me rappelle les moments spéciaux 
-              que nous partageons. C'est notre chanson, notre mélodie d'amour. 
-              Je t'aime plus que les mots ne peuvent l'exprimer. 💕
+              Cette vidéo est la poésie de notre amour, écrite depuis ce jour à l'université où mon regard a trouvé le tien, 
+              jusqu'à ce premier rendez-vous où nos glaces ont fondé sous le soleil de nos premières confidences. 
+              Nous avons tissé notre amitié, puis nos cieux se sont ouverts quand nous avons avoué nos sentiments, 
+              traversant ensemble les orages qui nous ont forgés, dansant sous les étoiles de nos plus beaux moments. 
+              Aujourd'hui, je contemple notre voyage avec un coeur reconnaissant, sachant que notre mélodie continue, 
+              pour aujourd'hui, pour demain, et pour l'éternité.
             </p>
             <p className={styles.signature}>
               — Pour toujours, ton amour

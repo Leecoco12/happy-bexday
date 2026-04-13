@@ -5,28 +5,28 @@ import styles from './Moments.module.css';
 const moments = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800&auto=format&fit=crop&q=70',
+    image: '/src/assets/images/recontre.png',
     title: 'Notre première rencontre',
     text: 'Je me souviens encore de ce jour comme si c\'était hier. Ton sourire illuminait la pièce, et dans ce moment, j\'ai su que quelque chose de spécial commençait entre nous. Le temps s\'est arrêté, et il ne restait que toi et moi.',
     layout: 'left'
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1492633423870-43d1bec2795f?w=800&auto=format&fit=crop&q=70',
+    image: '/src/assets/images/image.png',
     title: 'Les promenades infinies',
     text: 'Nos heures passées à marcher main dans la main, parlant de tout et de rien. Chaque pas était une promesse, chaque silence rempli de mots non-dits mais ressentis. Ces moments simples sont devenus mes trésors les plus précieux.',
     layout: 'right'
   },
   {
     id: 3,
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&fit=crop&q=70',
+    image: '/src/assets/images/rire.png',
     title: 'Les rires partagés',
     text: 'Rien ne me rend plus heureux que d\'entendre ton rire. C\'est une mélodie qui apaise mon âme, une musique qui danse dans mon cœur. Dans ces moments de joie pure, je trouve le sens de tout ce qui est beau dans la vie.',
     layout: 'left'
   },
   {
     id: 4,
-    image: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&auto=format&fit=crop&q=70',
+    image: '/src/assets/images/regard.png',
     title: 'Les regards complices',
     text: 'Ces moments où aucun mot n\'est nécessaire, où nos yeux se rencontrent et tout est dit. Dans ces silences partagés, je trouve une connexion plus profonde que mille conversations. C\'est notre langage secret, notre intimité sacrée.',
     layout: 'right'

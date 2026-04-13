@@ -16,7 +16,7 @@ export function Special() {
     },
     { 
       id: 'song', 
-      title: 'Song for You', 
+      title: 'Video for you', 
       icon: '🎵', 
       message: 'Une mélodie qui vient du cœur',
       color: '#8b5a3c',

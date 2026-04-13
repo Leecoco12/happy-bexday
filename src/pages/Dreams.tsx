@@ -5,28 +5,28 @@ import styles from './Dreams.module.css';
 const dreams = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&fit=crop&q=70',
+    image: '/src/assets/images/voyager.png',
     title: 'Voyager ensemble',
     text: 'Je rêve de découvrir le monde à tes côtés. Chaque ville, chaque paysage, chaque aventure serait plus belle parce que tu seras là. Des rues de Paris aux plages des Maldives, chaque moment serait une page de notre livre d\'amour.',
     layout: 'left'
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1510626176963-1b8d1c04c5f8?w=800&auto=format&fit=crop&q=70',
+    image: '/src/assets/images/maison.png',
     title: 'Notre petit nid douillet',
     text: 'Je rêve de notre maison, remplie de rires, de chaleur et d\'amour. Un endroit où chaque coin raconte notre histoire, où chaque matin commence avec ton sourire et chaque soirée s\'achève dans tes bras.',
     layout: 'right'
   },
   {
     id: 3,
-    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop&q=70',
+    image: '/src/assets/images/creation.png',
     title: 'Créer ensemble',
     text: 'Je rêve de construire quelque chose de beau avec toi. Que ce soit une famille, un projet, ou simplement une vie remplie de bonheur partagé. Je vois notre futur comme une toile vierge, prête à être peinte avec les couleurs de notre amour.',
     layout: 'left'
   },
   {
     id: 4,
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=70',
+    image: '/src/assets/images/main1.png',
     title: 'Grandir main dans la main',
     text: 'Je rêve de vieillir à tes côtés, de voir nos cheveux blanchir ensemble, de partager chaque saison de la vie. Je veux être là pour toi dans les joies comme dans les épreuves, ton roc, ton refuge, ton éternel compagnon.',
     layout: 'right'
