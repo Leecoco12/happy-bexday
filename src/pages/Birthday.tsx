@@ -73,12 +73,16 @@ export function Birthday() {
       setIsCameraOpen(true);
     } catch (error) {
       console.error('Erreur d\'accès à la caméra:', error);
-      if (error.name === 'NotAllowedError') {
-        alert('Vous avez refusé l\'accès à la caméra. Veuillez autoriser la caméra dans les paramètres du navigateur.');
-      } else if (error.name === 'NotFoundError') {
-        alert('Aucune caméra trouvée sur cet appareil.');
+      if (error instanceof Error) {
+        if (error.name === 'NotAllowedError') {
+          alert('Vous avez refusé l\'accès à la caméra. Veuillez autoriser la caméra dans les paramètres du navigateur.');
+        } else if (error.name === 'NotFoundError') {
+          alert('Aucune caméra trouvée sur cet appareil.');
+        } else {
+          alert('Impossible d\'accéder à la caméra: ' + error.message);
+        }
       } else {
-        alert('Impossible d\'accéder à la caméra: ' + error.message);
+        alert('Erreur inconnue lors de l\'accès à la caméra.');
       }
     }
   };
@@ -245,12 +249,12 @@ export function Birthday() {
                 alt={image.alt}
                 className={styles.image}
                 loading="lazy"
-                onError={(e) => {
+                onError={() => {
                   console.error('Erreur de chargement de l\'image:', image.src?.substring(0, 50) + '...');
                   console.error('Type d\'image:', typeof image.src);
                   console.error('Image complète:', image);
                 }}
-                onLoad={(e) => {
+                onLoad={() => {
                   console.log('Image chargée avec succès:', image.alt);
                 }}
               />
