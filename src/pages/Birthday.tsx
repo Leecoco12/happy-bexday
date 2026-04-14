@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import styles from './Birthday.module.css';
+import { staticImages, imageNames } from '../assets/images/imageImports';
 
 
 interface CapturedPhoto {
@@ -20,16 +21,33 @@ export function Birthday() {
   const [imageDescription, setImageDescription] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Initialiser avec les images statiques
   useEffect(() => {
+    const staticPhotoList: CapturedPhoto[] = Object.entries(staticImages).map(([key, src], index) => ({
+      id: `static-${key}`,
+      src,
+      alt: imageNames[key as keyof typeof imageNames] || `Image ${index + 1}`,
+      timestamp: new Date()
+    }));
+    
     const savedPhotos = localStorage.getItem('birthdayPhotos');
     if (savedPhotos) {
-      setCapturedPhotos(JSON.parse(savedPhotos));
+      try {
+        const parsedPhotos = JSON.parse(savedPhotos);
+        setCapturedPhotos([...staticPhotoList, ...parsedPhotos]);
+      } catch (error) {
+        setCapturedPhotos(staticPhotoList);
+      }
+    } else {
+      setCapturedPhotos(staticPhotoList);
     }
   }, []);
 
   useEffect(() => {
-    if (capturedPhotos.length > 0) {
-      localStorage.setItem('birthdayPhotos', JSON.stringify(capturedPhotos));
+    // Ne sauvegarder que les photos personnalisées (pas les images statiques)
+    const customPhotos = capturedPhotos.filter(photo => !photo.id.startsWith('static-'));
+    if (customPhotos.length > 0) {
+      localStorage.setItem('birthdayPhotos', JSON.stringify(customPhotos));
     }
   }, [capturedPhotos]);
 
@@ -73,10 +91,16 @@ export function Birthday() {
   };
 
   const deletePhoto = (photoId: string) => {
+    // Empêcher la suppression des images statiques
+    if (photoId.startsWith('static-')) {
+      return;
+    }
+    
     setCapturedPhotos(prev => {
       const newPhotos = prev.filter(photo => photo.id !== photoId);
       // Mettre à jour le localStorage immédiatement
-      localStorage.setItem('birthdayPhotos', JSON.stringify(newPhotos));
+      const customPhotos = newPhotos.filter(photo => !photo.id.startsWith('static-'));
+      localStorage.setItem('birthdayPhotos', JSON.stringify(customPhotos));
       return newPhotos;
     });
   };
@@ -196,7 +220,7 @@ export function Birthday() {
               />
               <div className={styles.overlay}>
                 <span className={styles.overlayText}>{image.alt}</span>
-                {(image as CapturedPhoto).id && (
+                {(image as CapturedPhoto).id && !(image as CapturedPhoto).id.startsWith('static-') && (
                   <button
                     className={styles.deleteButton}
                     onClick={(e) => {
@@ -204,7 +228,7 @@ export function Birthday() {
                       deletePhoto((image as CapturedPhoto).id);
                     }}
                   >
-                    🗑️
+                    &#128465;
                   </button>
                 )}
               </div>
