@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import styles from './Song.module.css';
+import videoAnimation from '../assets/videos/animation_D.mp4';
  
 export function Song() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ export function Song() {
           <div className={styles.videoContainer}>
             <video
               className={styles.video}
-              src="/videos/animation_D.mp4"
+              src={videoAnimation}
               title="A special video for you"
               controls
               autoPlay
