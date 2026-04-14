@@ -1,32 +1,36 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import styles from './Dreams.module.css';
+import voyagerImage from '../assets/images/voyager.jpg';
+import maisonImage from '../assets/images/maison.jpg';
+import creationImage from '../assets/images/creation.jpg';
+import main1Image from '../assets/images/main1.jpg';
 
 const dreams = [
   {
     id: 1,
-    image: '/src/assets/images/voyager.jpg',
+    image: voyagerImage,
     title: 'Voyager ensemble',
     text: 'Je rêve de découvrir le monde à tes côtés. Chaque ville, chaque paysage, chaque aventure serait plus belle parce que tu seras là. Des rues de Paris aux plages des Maldives, chaque moment serait une page de notre livre d\'amour.',
     layout: 'left'
   },
   {
     id: 2,
-    image: '/src/assets/images/maison.jpg',
+    image: maisonImage,
     title: 'Notre petit nid douillet',
     text: 'Je rêve de notre maison, remplie de rires, de chaleur et d\'amour. Un endroit où chaque coin raconte notre histoire, où chaque matin commence avec ton sourire et chaque soirée s\'achève dans tes bras.',
     layout: 'right'
   },
   {
     id: 3,
-    image: '/src/assets/images/creation.jpg',
+    image: creationImage,
     title: 'Créer ensemble',
     text: 'Je rêve de construire quelque chose de beau avec toi. Que ce soit une famille, un projet, ou simplement une vie remplie de bonheur partagé. Je vois notre futur comme une toile vierge, prête à être peinte avec les couleurs de notre amour.',
     layout: 'left'
   },
   {
     id: 4,
-    image: '/src/assets/images/main1.jpg',
+    image: main1Image,
     title: 'Grandir main dans la main',
     text: 'Je rêve de vieillir à tes côtés, de voir nos cheveux blanchir ensemble, de partager chaque saison de la vie. Je veux être là pour toi dans les joies comme dans les épreuves, ton roc, ton refuge, ton éternel compagnon.',
     layout: 'right'
