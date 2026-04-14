@@ -25,42 +25,16 @@ export function Birthday() {
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Tester la connexion et charger les photos depuis Supabase au démarrage
+  // Charger les photos depuis Supabase au démarrage (optimisé)
   useEffect(() => {
-    console.log('Démarrage du chargement des photos...');
-    console.log('Test de connexion à Supabase...');
-    
-    // Test de connexion simple
-    const testConnection = async () => {
-      try {
-        const { data, error } = await supabase.from('birthday_photos').select('count');
-        if (error) {
-          console.error('Erreur de connexion à Supabase:', error);
-          return false;
-        } else {
-          console.log('Connexion Supabase réussie !');
-          console.log('Nombre de photos dans la base:', data);
-          return true;
-        }
-      } catch (e) {
-        console.error('Erreur test connexion:', e);
-        return false;
-      }
-    };
+    console.log('Démarrage du chargement rapide des photos...');
     
     const loadPhotos = async () => {
-      // D'abord tester la connexion
-      const isConnected = await testConnection();
-      if (!isConnected) {
-        console.log('Connexion échouée, utilisation du fallback localStorage');
-        setIsLoading(false);
-        return;
-      }
-      
       try {
-        console.log('Appel à SupabaseService.getAllPhotos()');
+        // Charger directement depuis Supabase sans test de connexion
+        console.log('Chargement depuis Supabase...');
         const photos = await SupabaseService.getAllPhotos();
-        console.log('Photos reçues de Supabase:', photos);
+        console.log('Photos reçues:', photos?.length || 0);
         
         if (photos && photos.length > 0) {
           const formattedPhotos = photos.map((photo: any) => ({
@@ -69,36 +43,33 @@ export function Birthday() {
             alt: photo.alt,
             timestamp: new Date(photo.timestamp)
           }));
-          console.log('Photos formatées:', formattedPhotos);
+          console.log('Photos formatées:', formattedPhotos.length);
           setCapturedPhotos(formattedPhotos);
         } else {
-          console.log('Aucune photo trouvée dans Supabase');
+          console.log('Aucune photo trouvée');
           setCapturedPhotos([]);
         }
       } catch (error) {
-        console.error('Erreur chargement photos Supabase:', error);
-        console.log('Tentative de fallback avec localStorage...');
-        // Fallback: utiliser localStorage
+        console.error('Erreur chargement Supabase:', error);
+        // Fallback rapide avec localStorage
         const savedPhotos = localStorage.getItem('birthdayPhotos');
         if (savedPhotos) {
           try {
-            const parsedPhotos = JSON.parse(savedPhotos);
-            setCapturedPhotos(parsedPhotos);
-            console.log('Photos chargées depuis localStorage:', parsedPhotos.length);
+            setCapturedPhotos(JSON.parse(savedPhotos));
+            console.log('Fallback localStorage OK');
           } catch (e) {
-            console.error('Erreur parsing localStorage:', e);
             setCapturedPhotos([]);
           }
         } else {
-          console.log('Aucune photo dans localStorage');
           setCapturedPhotos([]);
         }
       } finally {
         setIsLoading(false);
-        console.log('Chargement terminé, isLoading = false');
+        console.log('Chargement terminé');
       }
     };
 
+    // Démarrer le chargement immédiatement
     loadPhotos();
   }, []);
 
@@ -144,21 +115,30 @@ export function Birthday() {
   const deletePhoto = async (photoId: string) => {
     setIsDeleting(photoId);
     try {
-      console.log('Début de la suppression de la photo:', photoId);
+      console.log('Début de la suppression optimisée:', photoId);
       await SupabaseService.deletePhoto(photoId);
-      console.log('Suppression réussie, rechargement de toutes les photos...');
+      console.log('Suppression réussie, mise à jour locale...');
       
-      // Recharger toutes les photos depuis Supabase pour s'assurer d'avoir tout
-      const allPhotos = await SupabaseService.getAllPhotos();
-      const formattedPhotos = allPhotos.map((photo: any) => ({
-        id: photo.id,
-        src: photo.src,
-        alt: photo.alt,
-        timestamp: new Date(photo.timestamp)
-      }));
+      // Supprimer localement d'abord pour une réponse instantanée
+      setCapturedPhotos(prev => prev.filter(photo => photo.id !== photoId));
       
-      console.log('Toutes les photos rechargées après suppression:', formattedPhotos.length);
-      setCapturedPhotos(formattedPhotos);
+      // Recharger en arrière-plan pour vérifier la synchronisation
+      setTimeout(async () => {
+        try {
+          const allPhotos = await SupabaseService.getAllPhotos();
+          const formattedPhotos = allPhotos.map((photo: any) => ({
+            id: photo.id,
+            src: photo.src,
+            alt: photo.alt,
+            timestamp: new Date(photo.timestamp)
+          }));
+          setCapturedPhotos(formattedPhotos);
+          console.log('Synchronisation terminée:', formattedPhotos.length);
+        } catch (e) {
+          console.log('Erreur synchronisation arrière-plan, mais suppression locale réussie');
+        }
+      }, 1000);
+      
     } catch (error) {
       console.error('Erreur suppression photo Supabase:', error);
       // Fallback: supprimer seulement localement
@@ -173,45 +153,60 @@ export function Birthday() {
     if (pendingPhoto && imageDescription.trim()) {
       setIsUploading(true);
       try {
-        console.log('Début de l\'upload de la photo...');
-        // Utiliser l'upload base64 plus simple
-        await SupabaseService.uploadPhoto(
-          pendingPhoto.src, 
-          imageDescription.trim(),
-          'photo.jpg'
-        );
+        console.log('Début de l\'upload optimisé...');
         
-        console.log('Upload réussi, rechargement de toutes les photos...');
+        // Convertir l'image data URL en fichier
+        const response = await fetch(pendingPhoto.src);
+        const blob = await response.blob();
+        const file = new File([blob], `photo-${Date.now()}.jpg`, { type: 'image/jpeg' });
         
-        // Recharger toutes les photos depuis Supabase pour s'assurer d'avoir tout
-        const allPhotos = await SupabaseService.getAllPhotos();
-        const formattedPhotos = allPhotos.map((photo: any) => ({
-          id: photo.id,
-          src: photo.src,
-          alt: photo.alt,
-          timestamp: new Date(photo.timestamp)
-        }));
+        // Upload rapide
+        const uploadedPhoto = await SupabaseService.uploadPhotoFile(file, imageDescription.trim());
         
-        console.log('Toutes les photos rechargées:', formattedPhotos.length);
-        setCapturedPhotos(formattedPhotos);
+        // Ajouter immédiatement à l'état local pour une réponse instantanée
+        const newPhoto: CapturedPhoto = {
+          id: uploadedPhoto.id,
+          src: uploadedPhoto.src,
+          alt: uploadedPhoto.alt,
+          timestamp: new Date(uploadedPhoto.timestamp)
+        };
+        
+        setCapturedPhotos(prev => [newPhoto, ...prev]);
         setPendingPhoto(null);
         setShowDescriptionDialog(false);
         setImageDescription('');
+        
+        // Synchronisation en arrière-plan
+        setTimeout(async () => {
+          try {
+            const allPhotos = await SupabaseService.getAllPhotos();
+            const formattedPhotos = allPhotos.map((photo: any) => ({
+              id: photo.id,
+              src: photo.src,
+              alt: photo.alt,
+              timestamp: new Date(photo.timestamp)
+            }));
+            setCapturedPhotos(formattedPhotos);
+            console.log('Synchronisation terminée');
+          } catch (e) {
+            console.log('Erreur sync arrière-plan, mais ajout local réussi');
+          }
+        }, 1000);
+        
       } catch (error) {
-        console.error('Erreur upload photo Supabase:', error);
-        // Fallback: utiliser le localStorage
+        console.error('Erreur upload:', error);
+        // Fallback local
         const photoWithDescription: CapturedPhoto = {
           ...pendingPhoto,
           alt: imageDescription.trim()
         };
-        
         setCapturedPhotos(prev => [photoWithDescription, ...prev]);
         setPendingPhoto(null);
         setShowDescriptionDialog(false);
         setImageDescription('');
       } finally {
         setIsUploading(false);
-        console.log('Upload terminé, isUploading = false');
+        console.log('Upload terminé');
       }
     }
   };
