@@ -2,7 +2,9 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import styles from './Birthday.module.css';
-
+import { SupabaseService } from '../services/supabaseService';
+import { supabase } from '../services/supabaseService';
+import './loading-styles.css';
 
 interface CapturedPhoto {
   id: string;
@@ -18,28 +20,87 @@ export function Birthday() {
   const [pendingPhoto, setPendingPhoto] = useState<CapturedPhoto | null>(null);
   const [showDescriptionDialog, setShowDescriptionDialog] = useState(false);
   const [imageDescription, setImageDescription] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Initialiser avec les photos sauvegardées uniquement
+  // Tester la connexion et charger les photos depuis Supabase au démarrage
   useEffect(() => {
-    const savedPhotos = localStorage.getItem('birthdayPhotos');
-    if (savedPhotos) {
+    console.log('Démarrage du chargement des photos...');
+    console.log('Test de connexion à Supabase...');
+    
+    // Test de connexion simple
+    const testConnection = async () => {
       try {
-        const parsedPhotos = JSON.parse(savedPhotos);
-        setCapturedPhotos(parsedPhotos);
-      } catch (error) {
-        setCapturedPhotos([]);
+        const { data, error } = await supabase.from('birthday_photos').select('count');
+        if (error) {
+          console.error('Erreur de connexion à Supabase:', error);
+          return false;
+        } else {
+          console.log('Connexion Supabase réussie !');
+          console.log('Nombre de photos dans la base:', data);
+          return true;
+        }
+      } catch (e) {
+        console.error('Erreur test connexion:', e);
+        return false;
       }
-    } else {
-      setCapturedPhotos([]);
-    }
-  }, []);
+    };
+    
+    const loadPhotos = async () => {
+      // D'abord tester la connexion
+      const isConnected = await testConnection();
+      if (!isConnected) {
+        console.log('Connexion échouée, utilisation du fallback localStorage');
+        setIsLoading(false);
+        return;
+      }
+      
+      try {
+        console.log('Appel à SupabaseService.getAllPhotos()');
+        const photos = await SupabaseService.getAllPhotos();
+        console.log('Photos reçues de Supabase:', photos);
+        
+        if (photos && photos.length > 0) {
+          const formattedPhotos = photos.map((photo: any) => ({
+            id: photo.id,
+            src: photo.src,
+            alt: photo.alt,
+            timestamp: new Date(photo.timestamp)
+          }));
+          console.log('Photos formatées:', formattedPhotos);
+          setCapturedPhotos(formattedPhotos);
+        } else {
+          console.log('Aucune photo trouvée dans Supabase');
+          setCapturedPhotos([]);
+        }
+      } catch (error) {
+        console.error('Erreur chargement photos Supabase:', error);
+        console.log('Tentative de fallback avec localStorage...');
+        // Fallback: utiliser localStorage
+        const savedPhotos = localStorage.getItem('birthdayPhotos');
+        if (savedPhotos) {
+          try {
+            const parsedPhotos = JSON.parse(savedPhotos);
+            setCapturedPhotos(parsedPhotos);
+            console.log('Photos chargées depuis localStorage:', parsedPhotos.length);
+          } catch (e) {
+            console.error('Erreur parsing localStorage:', e);
+            setCapturedPhotos([]);
+          }
+        } else {
+          console.log('Aucune photo dans localStorage');
+          setCapturedPhotos([]);
+        }
+      } finally {
+        setIsLoading(false);
+        console.log('Chargement terminé, isLoading = false');
+      }
+    };
 
-  useEffect(() => {
-    if (capturedPhotos.length > 0) {
-      localStorage.setItem('birthdayPhotos', JSON.stringify(capturedPhotos));
-    }
-  }, [capturedPhotos]);
+    loadPhotos();
+  }, []);
 
   const openLightbox = (index: number) => {
     setSelectedImage(index);
@@ -80,31 +141,78 @@ export function Birthday() {
     }
   };
 
-  const deletePhoto = (photoId: string) => {
-    setCapturedPhotos(prev => {
-      const newPhotos = prev.filter(photo => photo.id !== photoId);
-      // Mettre à jour le localStorage immédiatement
-      localStorage.setItem('birthdayPhotos', JSON.stringify(newPhotos));
-      return newPhotos;
-    });
+  const deletePhoto = async (photoId: string) => {
+    setIsDeleting(photoId);
+    try {
+      console.log('Début de la suppression de la photo:', photoId);
+      await SupabaseService.deletePhoto(photoId);
+      console.log('Suppression réussie, rechargement de toutes les photos...');
+      
+      // Recharger toutes les photos depuis Supabase pour s'assurer d'avoir tout
+      const allPhotos = await SupabaseService.getAllPhotos();
+      const formattedPhotos = allPhotos.map((photo: any) => ({
+        id: photo.id,
+        src: photo.src,
+        alt: photo.alt,
+        timestamp: new Date(photo.timestamp)
+      }));
+      
+      console.log('Toutes les photos rechargées après suppression:', formattedPhotos.length);
+      setCapturedPhotos(formattedPhotos);
+    } catch (error) {
+      console.error('Erreur suppression photo Supabase:', error);
+      // Fallback: supprimer seulement localement
+      setCapturedPhotos(prev => prev.filter(photo => photo.id !== photoId));
+    } finally {
+      setIsDeleting(null);
+      console.log('Suppression terminée, isDeleting = null');
+    }
   };
 
-  const confirmDescription = () => {
+  const confirmDescription = async () => {
     if (pendingPhoto && imageDescription.trim()) {
-      const photoWithDescription: CapturedPhoto = {
-        ...pendingPhoto,
-        alt: imageDescription.trim()
-      };
-      
-      setCapturedPhotos(prev => {
-        const newPhotos = [photoWithDescription, ...prev];
-        // Le localStorage sera mis à jour par le useEffect
-        return newPhotos;
-      });
-      
-      setPendingPhoto(null);
-      setShowDescriptionDialog(false);
-      setImageDescription('');
+      setIsUploading(true);
+      try {
+        console.log('Début de l\'upload de la photo...');
+        // Utiliser l'upload base64 plus simple
+        await SupabaseService.uploadPhoto(
+          pendingPhoto.src, 
+          imageDescription.trim(),
+          'photo.jpg'
+        );
+        
+        console.log('Upload réussi, rechargement de toutes les photos...');
+        
+        // Recharger toutes les photos depuis Supabase pour s'assurer d'avoir tout
+        const allPhotos = await SupabaseService.getAllPhotos();
+        const formattedPhotos = allPhotos.map((photo: any) => ({
+          id: photo.id,
+          src: photo.src,
+          alt: photo.alt,
+          timestamp: new Date(photo.timestamp)
+        }));
+        
+        console.log('Toutes les photos rechargées:', formattedPhotos.length);
+        setCapturedPhotos(formattedPhotos);
+        setPendingPhoto(null);
+        setShowDescriptionDialog(false);
+        setImageDescription('');
+      } catch (error) {
+        console.error('Erreur upload photo Supabase:', error);
+        // Fallback: utiliser le localStorage
+        const photoWithDescription: CapturedPhoto = {
+          ...pendingPhoto,
+          alt: imageDescription.trim()
+        };
+        
+        setCapturedPhotos(prev => [photoWithDescription, ...prev]);
+        setPendingPhoto(null);
+        setShowDescriptionDialog(false);
+        setImageDescription('');
+      } finally {
+        setIsUploading(false);
+        console.log('Upload terminé, isUploading = false');
+      }
     }
   };
 
@@ -136,7 +244,21 @@ export function Birthday() {
 
         <h1 className={styles.title}>Votre Galerie d'Anniversaire &#x1f389;</h1>
 
-        {capturedPhotos.length === 0 && (
+        {isLoading ? (
+          <motion.div
+            className={styles.descriptionSection}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <p className={styles.descriptionText}>
+              <div className={styles.loadingSpinner}>
+                <span>Chargement de vos photos...</span>
+                <div className={styles.spinner}></div>
+              </div>
+            </p>
+          </motion.div>
+        ) : capturedPhotos.length === 0 ? (
           <motion.div
             className={styles.descriptionSection}
             initial={{ opacity: 0, y: 20 }}
@@ -148,7 +270,7 @@ export function Birthday() {
               et décrivez chaque moment précieux de cette journée spéciale.
             </p>
           </motion.div>
-        )}
+        ) : null}
 
         <motion.div
           className={styles.cameraSection}
@@ -204,17 +326,25 @@ export function Birthday() {
               />
               <div className={styles.overlay}>
                 <span className={styles.overlayText}>{image.alt}</span>
-                {(image as CapturedPhoto).id && (
-                  <button
+                <button
                     className={styles.deleteButton}
                     onClick={(e) => {
                       e.stopPropagation();
-                      deletePhoto((image as CapturedPhoto).id);
+                      const photoId = (image as CapturedPhoto).id;
+                      if (photoId) {
+                        deletePhoto(photoId);
+                      } else {
+                        console.error('Pas d\'ID pour cette photo:', image);
+                      }
+                    }}
+                    disabled={isDeleting === (image as CapturedPhoto).id}
+                    style={{ 
+                      opacity: isDeleting === (image as CapturedPhoto).id ? 0.5 : 1,
+                      cursor: isDeleting === (image as CapturedPhoto).id ? 'not-allowed' : 'pointer'
                     }}
                   >
-                    &#128465;
+                    {isDeleting === (image as CapturedPhoto).id ? '...' : '🗑️'}
                   </button>
-                )}
               </div>
             </motion.div>
           ))}
@@ -293,11 +423,11 @@ export function Birthday() {
               <motion.button
                 className={styles.confirmButton}
                 onClick={confirmDescription}
-                disabled={!imageDescription.trim()}
-                whileHover={{ scale: imageDescription.trim() ? 1.05 : 1 }}
-                whileTap={{ scale: imageDescription.trim() ? 0.95 : 1 }}
+                disabled={!imageDescription.trim() || isUploading}
+                whileHover={{ scale: imageDescription.trim() && !isUploading ? 1.05 : 1 }}
+                whileTap={{ scale: imageDescription.trim() && !isUploading ? 0.95 : 1 }}
               >
-                Ajouter la photo
+                {isUploading ? 'Ajout en cours...' : 'Ajouter la photo'}
               </motion.button>
               <motion.button
                 className={styles.rejectButton}
