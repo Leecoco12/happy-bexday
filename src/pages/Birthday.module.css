@@ -35,9 +35,27 @@
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   color: white;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   font-family: var(--font-display, system-ui, -apple-system, sans-serif);
+}
+
+.descriptionSection {
+  text-align: center;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.descriptionText {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  font-weight: 400;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin: 0;
+  padding: 0 1rem;
 }
  
 .gallery {
@@ -202,77 +220,6 @@
   backdrop-filter: blur(10px);
 }
 
-.cameraContainer {
-  position: relative;
-  width: 100%;
-  max-width: 640px;
-  margin: 2rem auto;
-  border-radius: 20px;
-  overflow: hidden;
-  background: #000;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-}
-
-.video {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 20px;
-}
-
-.canvas {
-  display: none;
-}
-
-.cameraControls {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-}
-
-.captureButton {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: white;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-}
-
-.captureButton:hover {
-  background: #f0f0f0;
-  transform: scale(1.1);
-}
-
-.cancelButton {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.cancelButton:hover {
-  background: white;
-  transform: scale(1.05);
-}
 
 .deleteButton {
   position: absolute;
@@ -393,6 +340,47 @@
   background: #e5e7eb;
   color: #4b5563;
   transform: translateY(-2px);
+}
+
+.descriptionInput {
+  margin-bottom: 1.5rem;
+}
+
+.descriptionTextarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.3s ease;
+  background: #f9fafb;
+}
+
+.descriptionTextarea:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.descriptionTextarea::placeholder {
+  color: #9ca3af;
+}
+
+.characterCount {
+  text-align: right;
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+.confirmButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
 }
  
 
