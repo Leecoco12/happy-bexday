@@ -18,7 +18,7 @@ export function Special() {
       id: 'song', 
       title: 'Video for you', 
       icon: '🎵', 
-      message: 'Une mélodie qui vient du cœur',
+      message: 'Une surprise pour toi',
       color: '#8b5a3c',
       stamp: '🎼'
     },
@@ -83,7 +83,7 @@ export function Special() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7, duration: 0.6 }}
           >
-            Célébration Spéciale • 2025
+            Célébration Spéciale • 2026
           </motion.div>
         </div>
 
