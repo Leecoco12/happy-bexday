@@ -10,6 +10,10 @@ import bouquetImage1 from '../assets/images/bouquet1.png';
 import cadeauImage from '../assets/images/cadeau1.png';
 import laroImage from '../assets/images/migon.jpg';
 // import plageImage from '../assets/images/plage.png';
+import giatoImage from '../assets/images/giato.png';
+import mengotyImage from '../assets/images/mengoty.png';
+import donnecodeImage from '../assets/images/donnecode.png';
+import telImage from '../assets/images/tel.png';
 import './loading-styles.css';
 
 interface CapturedPhoto {
@@ -56,6 +60,34 @@ export function Birthday() {
       id: 'static-laro',
       src: laroImage,
       alt: 'Laro',
+      timestamp: new Date('2026-04-15T00:00:00.000Z'),
+      isStatic: true
+    },
+    {
+      id: 'static-giato',
+      src: giatoImage,
+      alt: 'Preparation Giato',
+      timestamp: new Date('2026-04-15T00:00:00.000Z'),
+      isStatic: true
+    },
+    {
+      id: 'static-mengoty',
+      src: mengotyImage,
+      alt: 'Miangoty',
+      timestamp: new Date('2026-04-15T00:00:00.000Z'),
+      isStatic: true
+    },
+    {
+      id: 'static-donnecode',
+      src: donnecodeImage,
+      alt: 'Donne-moi le code',
+      timestamp: new Date('2026-04-15T00:00:00.000Z'),
+      isStatic: true
+    },
+    {
+      id: 'static-tel',
+      src: telImage,
+      alt: 'Acces au site',
       timestamp: new Date('2026-04-15T00:00:00.000Z'),
       isStatic: true
     },
