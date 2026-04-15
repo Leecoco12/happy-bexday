@@ -5,8 +5,9 @@ import styles from './Birthday.module.css';
 import { ImgBBService } from '../services/imgbbService';
 import carteImage from '../assets/images/Carte.png';
 import bouquetImage from '../assets/images/bouquet.png';
+import bouquetImage1 from '../assets/images/bouquet1.png';
 //import cadeauImage from '../assets/images/Cadeau.png';
-import cadeauImage from '../assets/images/Cadeau1.png';
+import cadeauImage from '../assets/images/cadeau1.png';
 // import laroImage from '../assets/images/Laro.png';
 // import plageImage from '../assets/images/Plage.png';
 import './loading-styles.css';
@@ -37,13 +38,13 @@ export function Birthday() {
       timestamp: new Date('2026-04-15T00:00:00.000Z'),
       isStatic: true
     },
-    // {
-    //   id: 'static-bouquet',
-    //   src: bouquetImage2,
-    //   alt: 'Bouquet de fleurs 2',
-    //   timestamp: new Date('2026-04-15T00:00:00.000Z'),
-    //   isStatic: true
-    // },
+    {
+      id: 'static-bouquet',
+      src: bouquetImage1,
+      alt: 'Bouquet de fleurs 2',
+      timestamp: new Date('2026-04-15T00:00:00.000Z'),
+      isStatic: true
+    },
     {
       id: 'static-cadeau1',
       src: cadeauImage,
