@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import styles from './Birthday.module.css';
 import { SupabaseService } from '../services/supabaseService';
-import { supabase } from '../services/supabaseService';
 import './loading-styles.css';
 
 interface CapturedPhoto {
