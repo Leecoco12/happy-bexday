@@ -10,10 +10,10 @@ import bouquetImage1 from '../assets/images/bouquet1.png';
 import cadeauImage from '../assets/images/cadeau1.png';
 import laroImage from '../assets/images/migon.jpg';
 // import plageImage from '../assets/images/plage.png';
-import giatoImage from '../assets/images/giato.png';
-import mengotyImage from '../assets/images/mengoty.png';
-import donnecodeImage from '../assets/images/donnecode.png';
-import telImage from '../assets/images/tel.png';
+import giatoImage from '../assets/images/giato.jpeg';
+import mengotyImage from '../assets/images/mengoty.jpeg';
+import donnecodeImage from '../assets/images/donnecode.jpeg';
+import telImage from '../assets/images/tel.jpeg';
 import './loading-styles.css';
 
 interface CapturedPhoto {
