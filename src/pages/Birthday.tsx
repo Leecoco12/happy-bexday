@@ -8,8 +8,8 @@ import bouquetImage from '../assets/images/bouquet.png';
 import bouquetImage1 from '../assets/images/bouquet1.png';
 //import cadeauImage from '../assets/images/Cadeau.png';
 import cadeauImage from '../assets/images/cadeau1.png';
-// import laroImage from '../assets/images/Laro.png';
-// import plageImage from '../assets/images/Plage.png';
+import laroImage from '../assets/images/laro.png';
+import plageImage from '../assets/images/plage.png';
 import './loading-styles.css';
 
 interface CapturedPhoto {
@@ -52,20 +52,20 @@ export function Birthday() {
       timestamp: new Date('2026-04-15T00:00:00.000Z'),
       isStatic: true
     },
-    // {
-    //   id: 'static-laro',
-    //   src: laroImage,
-    //   alt: 'Laro',
-    //   timestamp: new Date('2026-04-15T00:00:00.000Z'),
-    //   isStatic: true
-    // },
-    // {
-    //   id: 'static-plage',
-    //   src: plageImage,
-    //   alt: 'Plage',
-    //   timestamp: new Date('2026-04-15T00:00:00.000Z'),
-    //   isStatic: true
-    // },
+    {
+      id: 'static-laro',
+      src: laroImage,
+      alt: 'Laro',
+      timestamp: new Date('2026-04-15T00:00:00.000Z'),
+      isStatic: true
+    },
+    {
+      id: 'static-plage',
+      src: plageImage,
+      alt: 'Plage',
+      timestamp: new Date('2026-04-15T00:00:00.000Z'),
+      isStatic: true
+    },
   ];
 
   const navigate = useNavigate();
