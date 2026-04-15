@@ -2,7 +2,13 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import styles from './Birthday.module.css';
-import { SupabaseService } from '../services/supabaseService';
+import { ImgBBService } from '../services/imgbbService';
+import carteImage from '../assets/images/Carte.png';
+import bouquetImage from '../assets/images/bouquet.png';
+import bouquetImage2 from '../assets/images/IMG_0563.png';
+import cadeauImage from '../assets/images/Cadeau.png';
+import laroImage from '../assets/images/Laro.png';
+import plageImage from '../assets/images/Plage.png';
 import './loading-styles.css';
 
 interface CapturedPhoto {
@@ -10,9 +16,57 @@ interface CapturedPhoto {
   src: string;
   alt: string;
   timestamp: Date;
+  delete_url?: string;
+  file?: File;
+  isStatic?: boolean;
 }
 
 export function Birthday() {
+  const staticPhotos: CapturedPhoto[] = [
+    {
+      id: 'static-carte',
+      src: carteImage,
+      alt: 'Carte anniversaire',
+      timestamp: new Date('2026-04-15T00:00:00.000Z'),
+      isStatic: true
+    },
+    {
+      id: 'static-bouquet',
+      src: bouquetImage,
+      alt: 'Bouquet de fleurs',
+      timestamp: new Date('2026-04-15T00:00:00.000Z'),
+      isStatic: true
+    },
+    {
+      id: 'static-bouquet',
+      src: bouquetImage2,
+      alt: 'Bouquet de fleurs 2',
+      timestamp: new Date('2026-04-15T00:00:00.000Z'),
+      isStatic: true
+    },
+    {
+      id: 'static-cadeau',
+      src: cadeauImage,
+      alt: 'Cadeau',
+      timestamp: new Date('2026-04-15T00:00:00.000Z'),
+      isStatic: true
+    },
+    {
+      id: 'static-laro',
+      src: laroImage,
+      alt: 'Laro',
+      timestamp: new Date('2026-04-15T00:00:00.000Z'),
+      isStatic: true
+    },
+    {
+      id: 'static-plage',
+      src: plageImage,
+      alt: 'Plage',
+      timestamp: new Date('2026-04-15T00:00:00.000Z'),
+      isStatic: true
+    },
+  ];
+
   const navigate = useNavigate();
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [capturedPhotos, setCapturedPhotos] = useState<CapturedPhoto[]>([]);
@@ -24,44 +78,27 @@ export function Birthday() {
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Charger les photos depuis Supabase au démarrage (optimisé)
+  // Charger les images depuis localStorage au démarrage
   useEffect(() => {
-    console.log('Démarrage du chargement rapide des photos...');
+    console.log('Démarrage du chargement depuis localStorage...');
     
-    const loadPhotos = async () => {
+    const loadImages = async () => {
       try {
-        // Charger directement depuis Supabase sans test de connexion
-        console.log('Chargement depuis Supabase...');
-        const photos = await SupabaseService.getAllPhotos();
-        console.log('Photos reçues:', photos?.length || 0);
+        // Charger depuis localStorage
+        console.log('Chargement depuis localStorage...');
+        const images = await ImgBBService.getAllImages();
+        console.log('Images reçues:', images?.length || 0);
         
-        if (photos && photos.length > 0) {
-          const formattedPhotos = photos.map((photo: any) => ({
-            id: photo.id,
-            src: photo.src,
-            alt: photo.alt,
-            timestamp: new Date(photo.timestamp)
-          }));
-          console.log('Photos formatées:', formattedPhotos.length);
-          setCapturedPhotos(formattedPhotos);
+        if (images && images.length > 0) {
+          setCapturedPhotos(images);
+          console.log('Images formatées:', images.length);
         } else {
-          console.log('Aucune photo trouvée');
+          console.log('Aucune image trouvée');
           setCapturedPhotos([]);
         }
       } catch (error) {
-        console.error('Erreur chargement Supabase:', error);
-        // Fallback rapide avec localStorage
-        const savedPhotos = localStorage.getItem('birthdayPhotos');
-        if (savedPhotos) {
-          try {
-            setCapturedPhotos(JSON.parse(savedPhotos));
-            console.log('Fallback localStorage OK');
-          } catch (e) {
-            setCapturedPhotos([]);
-          }
-        } else {
-          setCapturedPhotos([]);
-        }
+        console.error('Erreur chargement images:', error);
+        setCapturedPhotos([]);
       } finally {
         setIsLoading(false);
         console.log('Chargement terminé');
@@ -69,7 +106,7 @@ export function Birthday() {
     };
 
     // Démarrer le chargement immédiatement
-    loadPhotos();
+    loadImages();
   }, []);
 
   const openLightbox = (index: number) => {
@@ -96,7 +133,8 @@ export function Birthday() {
           id: Date.now().toString(),
           src: imageData,
           alt: '',
-          timestamp: new Date()
+          timestamp: new Date(),
+          file: file // Stocker le File object pour l'upload
         };
         
         setPendingPhoto(newPhoto);
@@ -114,32 +152,15 @@ export function Birthday() {
   const deletePhoto = async (photoId: string) => {
     setIsDeleting(photoId);
     try {
-      console.log('Début de la suppression optimisée:', photoId);
-      await SupabaseService.deletePhoto(photoId);
-      console.log('Suppression réussie, mise à jour locale...');
+      console.log('Début de la suppression:', photoId);
+      await ImgBBService.deleteImage(photoId);
+      console.log('Suppression réussie');
       
-      // Supprimer localement d'abord pour une réponse instantanée
+      // Supprimer localement pour une réponse instantanée
       setCapturedPhotos(prev => prev.filter(photo => photo.id !== photoId));
       
-      // Recharger en arrière-plan pour vérifier la synchronisation
-      setTimeout(async () => {
-        try {
-          const allPhotos = await SupabaseService.getAllPhotos();
-          const formattedPhotos = allPhotos.map((photo: any) => ({
-            id: photo.id,
-            src: photo.src,
-            alt: photo.alt,
-            timestamp: new Date(photo.timestamp)
-          }));
-          setCapturedPhotos(formattedPhotos);
-          console.log('Synchronisation terminée:', formattedPhotos.length);
-        } catch (e) {
-          console.log('Erreur synchronisation arrière-plan, mais suppression locale réussie');
-        }
-      }, 1000);
-      
     } catch (error) {
-      console.error('Erreur suppression photo Supabase:', error);
+      console.error('Erreur suppression photo:', error);
       // Fallback: supprimer seulement localement
       setCapturedPhotos(prev => prev.filter(photo => photo.id !== photoId));
     } finally {
@@ -152,43 +173,30 @@ export function Birthday() {
     if (pendingPhoto && imageDescription.trim()) {
       setIsUploading(true);
       try {
-        console.log('Début de l\'upload optimisé...');
+        console.log('Début de l\'upload vers ImgBB...');
         
-        // Convertir l'image data URL en fichier
-        const response = await fetch(pendingPhoto.src);
-        const blob = await response.blob();
-        const file = new File([blob], `photo-${Date.now()}.jpg`, { type: 'image/jpeg' });
+        // Upload vers ImgBB
+        if (!pendingPhoto.file) {
+          throw new Error('Aucun fichier à uploader');
+        }
+        const uploadedPhoto = await ImgBBService.uploadImage(pendingPhoto.file, imageDescription.trim());
         
-        // Upload rapide
-        const uploadedPhoto = await SupabaseService.uploadPhotoFile(file, imageDescription.trim());
-        
-        // Ajouter immédiatement à l'état local pour une réponse instantanée
-        const newPhoto: CapturedPhoto = {
-          id: uploadedPhoto.id,
-          src: uploadedPhoto.src,
-          alt: uploadedPhoto.alt,
-          timestamp: new Date(uploadedPhoto.timestamp)
-        };
-        
-        setCapturedPhotos(prev => [newPhoto, ...prev]);
+        // Ajouter immédiatement à l'état local
+        setCapturedPhotos(prev => [uploadedPhoto, ...prev]);
         setPendingPhoto(null);
         setShowDescriptionDialog(false);
         setImageDescription('');
         
-        // Synchronisation en arrière-plan
+        console.log('Upload terminé avec succès');
+        
+        // Forcer le rafraîchissement après un court délai
         setTimeout(async () => {
           try {
-            const allPhotos = await SupabaseService.getAllPhotos();
-            const formattedPhotos = allPhotos.map((photo: any) => ({
-              id: photo.id,
-              src: photo.src,
-              alt: photo.alt,
-              timestamp: new Date(photo.timestamp)
-            }));
-            setCapturedPhotos(formattedPhotos);
-            console.log('Synchronisation terminée');
-          } catch (e) {
-            console.log('Erreur sync arrière-plan, mais ajout local réussi');
+            const images = await ImgBBService.getAllImages();
+            setCapturedPhotos(images);
+            console.log('Rafraîchissement automatique après upload:', images.length);
+          } catch (error) {
+            console.error('Erreur rafraîchissement automatique:', error);
           }
         }, 1000);
         
@@ -217,7 +225,7 @@ export function Birthday() {
   };
 
 
-  const allImages = capturedPhotos;
+  const allImages = [...staticPhotos, ...capturedPhotos];
 
   return (
     <div className={styles.container}>
@@ -245,12 +253,12 @@ export function Birthday() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <p className={styles.descriptionText}>
+            <div className={styles.descriptionText}>
               <div className={styles.loadingSpinner}>
                 <span>Chargement de vos photos...</span>
                 <div className={styles.spinner}></div>
               </div>
-            </p>
+            </div>
           </motion.div>
         ) : capturedPhotos.length === 0 ? (
           <motion.div
@@ -277,8 +285,16 @@ export function Birthday() {
             onClick={openFileSelector}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            disabled={isUploading}
           >
-            Ajouter une photo
+            {isUploading ? (
+              <>
+                <span className={styles.loadingSpinner}></span>
+                Upload en cours...
+              </>
+            ) : (
+              'Ajouter une photo'
+            )}
           </motion.button>
           
           <input
@@ -294,11 +310,14 @@ export function Birthday() {
               {capturedPhotos.length} photo{capturedPhotos.length > 1 ? 's' : ''} ajoutée{capturedPhotos.length > 1 ? 's' : ''}
             </div>
           )}
+          
         </motion.div>
 
 
         <div className={styles.gallery}>
-          {allImages.map((image, index) => (
+          {allImages.map((image, index) => {
+            console.log(`Image ${index}:`, image.src, 'Alt:', image.alt);
+            return (
             <motion.div
               key={index}
               className={styles.imageContainer}
@@ -317,31 +336,39 @@ export function Birthday() {
                 alt={image.alt}
                 className={styles.image}
                 loading="lazy"
+                onLoad={() => console.log(`Image ${index} chargée avec succès`)}
+                onError={(e) => {
+                  console.error(`Erreur chargement image ${index}:`, image.src);
+                  e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vbiBkaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg==';
+                }}
               />
               <div className={styles.overlay}>
                 <span className={styles.overlayText}>{image.alt}</span>
-                <button
-                    className={styles.deleteButton}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      const photoId = (image as CapturedPhoto).id;
-                      if (photoId) {
-                        deletePhoto(photoId);
-                      } else {
-                        console.error('Pas d\'ID pour cette photo:', image);
-                      }
-                    }}
-                    disabled={isDeleting === (image as CapturedPhoto).id}
-                    style={{ 
-                      opacity: isDeleting === (image as CapturedPhoto).id ? 0.5 : 1,
-                      cursor: isDeleting === (image as CapturedPhoto).id ? 'not-allowed' : 'pointer'
-                    }}
-                  >
-                    {isDeleting === (image as CapturedPhoto).id ? '...' : '🗑️'}
-                  </button>
+                {!image.isStatic && (
+                  <button
+                      className={styles.deleteButton}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const photoId = (image as CapturedPhoto).id;
+                        if (photoId) {
+                          deletePhoto(photoId);
+                        } else {
+                          console.error('Pas d\'ID pour cette photo:', image);
+                        }
+                      }}
+                      disabled={isDeleting === (image as CapturedPhoto).id}
+                      style={{ 
+                        opacity: isDeleting === (image as CapturedPhoto).id ? 0.5 : 1,
+                        cursor: isDeleting === (image as CapturedPhoto).id ? 'not-allowed' : 'pointer'
+                      }}
+                    >
+                      {isDeleting === (image as CapturedPhoto).id ? '...' : '🗑️'}
+                    </button>
+                )}
               </div>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
       </motion.div>
 
