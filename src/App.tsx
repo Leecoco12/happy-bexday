@@ -10,37 +10,47 @@ import { Birthday } from './pages/Birthday';
 import { Song } from './pages/Song';
 import { Moments } from './pages/Moments';
 import { Dreams } from './pages/Dreams';
+import { AccessProtection } from './components/AccessProtection';
 
 type Phase = 'countdown' | 'birthday';
 
 export default function App() {
   const [phase, setPhase] = useState<Phase>('countdown');
+  const [accessGranted, setAccessGranted] = useState(false);
 
   const handleCountdownComplete = () => {
     setPhase('birthday');
   };
 
+  const handleAccessGranted = () => {
+    setAccessGranted(true);
+  };
+
   return (
-    <ThemeProvider>
-      <Router>
-        <Routes>
-          <Route 
-            path="/" 
-            element={
-              phase === 'countdown' ? (
-                <Countdown onComplete={handleCountdownComplete} />
-              ) : (
-                <Home />
-              )
-            } 
-          />
-          <Route path="/special" element={<Special />} />
-          <Route path="/birthday" element={<Birthday />} />
-          <Route path="/song" element={<Song />} />
-          <Route path="/moments" element={<Moments />} />
-          <Route path="/dreams" element={<Dreams />} />
-        </Routes>
-      </Router>
-    </ThemeProvider>
+    <AccessProtection onAccessGranted={handleAccessGranted}>
+      <ThemeProvider>
+        <Router>
+          {accessGranted && (
+            <Routes>
+              <Route 
+                path="/" 
+                element={
+                  phase === 'countdown' ? (
+                    <Countdown onComplete={handleCountdownComplete} />
+                  ) : (
+                    <Home />
+                  )
+                } 
+              />
+              <Route path="/special" element={<Special />} />
+              <Route path="/birthday" element={<Birthday />} />
+              <Route path="/song" element={<Song />} />
+              <Route path="/moments" element={<Moments />} />
+              <Route path="/dreams" element={<Dreams />} />
+            </Routes>
+          )}
+        </Router>
+      </ThemeProvider>
+    </AccessProtection>
   );
 }
