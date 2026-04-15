@@ -5,7 +5,7 @@ import styles from './Birthday.module.css';
 import { ImgBBService } from '../services/imgbbService';
 import carteImage from '../assets/images/Carte.png';
 import bouquetImage from '../assets/images/bouquet.png';
-import bouquetImage2 from '../assets/images/IMG_0563.png';
+import bouquetImage2 from '../assets/images/bouq.png';
 import cadeauImage from '../assets/images/Cadeau.png';
 import laroImage from '../assets/images/Laro.png';
 import plageImage from '../assets/images/Plage.png';
