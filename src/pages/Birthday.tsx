@@ -113,6 +113,8 @@ export function Birthday() {
     setSelectedImage(index);
   };
 
+  ///testet maj
+
   const closeLightbox = () => {
     setSelectedImage(null);
   };
