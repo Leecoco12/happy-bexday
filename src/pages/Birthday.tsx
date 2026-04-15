@@ -8,7 +8,7 @@ import bouquetImage from '../assets/images/bouquet.png';
 import bouquetImage1 from '../assets/images/bouquet1.png';
 //import cadeauImage from '../assets/images/Cadeau.png';
 import cadeauImage from '../assets/images/cadeau1.png';
-import laroImage from '../assets/images/migon.png';
+import laroImage from '../assets/images/migon.jpg';
 // import plageImage from '../assets/images/plage.png';
 import './loading-styles.css';
 
